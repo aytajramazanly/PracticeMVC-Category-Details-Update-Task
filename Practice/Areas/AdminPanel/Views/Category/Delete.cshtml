@@ -1,0 +1,45 @@
+﻿@model Category
+@{
+    ViewData["Title"] = "Delete";
+}
+<div class="card flex-row justify-content-evenly">
+    @if (Model.IsMain)
+    {
+        <img class="card-img-top" src="~/assets/images/@Model.Image" alt="Card image cap" style="max-width: 400px; max-height: 600px">
+    }
+    <div class="w-50">
+        <div class="card-body">
+            <h1 class="card-title text-success">@Model.Name</h1>
+        </div>
+        <ul class="list-group list-group-flush card-body">
+            @if (Model.IsMain)
+            {
+                <h5 class="text-primary">Children</h5>
+                @if (Model.Children.Count == 0)
+                {
+                    <li class="list-group-item bg-warning rounded mb-3">There is no any children</li>
+                }
+                else
+                {
+                    @foreach (var item in Model.Children)
+                    {
+                        <li class="list-group-item bg-warning rounded mb-3">@item.Name</li>
+                    }
+                }
+            }
+            else
+            {
+                <h5 class="text-primary">Parents</h5>
+                <li class="list-group-item bg-warning rounded mb-3">@Model.Parent.Name</li>
+            }
+            <li class="list-group-item bg-warning rounded mb-3 m-auto" style="width: fit-content" >
+                <form method="post" class="forms-sample">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <a class="btn btn-light" asp-action="Index">Cancel</a>
+                </form>
+            </li>
+        </ul>
+
+    </div>
+</div>
+

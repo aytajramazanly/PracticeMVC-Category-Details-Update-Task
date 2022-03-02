@@ -1,0 +1,61 @@
+﻿@model Category
+@{
+    ViewData["Title"] = "Update";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-10 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="text-warning">Update @(Model.IsMain==true ? "Parent" : "Children") Category</h4>
+                <form class="forms-sample" method="post" enctype="multipart/form-data">
+                    <div class="text-danger" asp-validation-summary=ModelOnly></div>
+                    <div class="form-group">
+                        <label asp-for="Name">Name</label>
+                        <input class="form-control" placeholder="Name" asp-for="Name">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group d-flex gap-3">
+                        <input placeholder="Name" asp-for="IsMain" type="hidden">
+
+                        <span asp-validation-for="IsMain" class="text-danger"></span>
+                    </div>
+                    <div class="form-group  @(Model.IsMain==false ? "d-none" : "")" id="photoDiv">
+                        <label asp-for="Photo">Photo</label>
+                        <img class="card-img-top" src="~/assets/images/@Model.Image" alt="Card image cap" style="max-width: 150px; max-height: 250px" id="existPhoto">
+                        <input class="form-control" placeholder="Photo" asp-for="Photo" id="uploadImg" accept="image/*">
+                        <span asp-validation-for="Photo" class="text-danger"></span>
+                    </div>
+                    <div class="form-group @(Model.IsMain==true ? "d-none" : "")" id="parentCategoryDiv">
+                        <label asp-for="Parent">Parent</label>
+                        <select asp-for="Parent.Id" asp-items="@(new SelectList(ViewBag.ParentCategories, nameof(Category.Parent.Id), nameof(Category.Parent.Name)))" class="js-example-basic-single select2-hidden-accessible" style="width:100%" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                            <option value="0">Please select one</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <a class="btn btn-light" asp-action="Index">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <partial name="_ValidationPartial" />
+    <script>
+        $("#uploadImg").change(function (e) {
+            const { files } = e.target
+            for (const file of files) {
+                const fileReader = new FileReader()
+
+                fileReader.onloadend = function (e) {
+                    const { result } = e.target
+                    $("#existPhoto").attr("src", result);
+                }
+                fileReader.readAsDataURL(file)
+            }
+        })
+
+    </script>
+}
+
